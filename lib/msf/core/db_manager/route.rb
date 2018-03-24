@@ -7,7 +7,10 @@ module Msf::DBManager::Route
       s = session
     end
     unless s.respond_to?(:routes)
-      raise ArgumentError.new("Invalid :session, expected Session object got #{session.class}")
+      if s.stype == "meterpreter"
+        raise "Meterpreter session doesn't have routing loaded yet.  Try again shortly."
+      else
+        raise "Session type #{session.class} does not support routing"
     end
 
   ::ActiveRecord::Base.connection_pool.with_connection {
@@ -25,7 +28,10 @@ module Msf::DBManager::Route
       s = session
     end
     unless s.respond_to?(:routes)
-      raise ArgumentError.new("Invalid :session, expected Session object got #{session.class}")
+      if s.stype == "meterpreter"
+        raise "Meterpreter session doesn't have routing loaded yet.  Try again shortly."
+      else
+        raise "Session type #{session.class} does not support routing"
     end
 
   ::ActiveRecord::Base.connection_pool.with_connection {
