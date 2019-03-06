@@ -222,7 +222,7 @@ protected
       s.set_from_exploit(assoc_exploit)
 
       # Pass along any associated payload uuid if specified
-      if opts[:payload_uuid]
+      if opts[:payload_uuid] and framework.db.active
         s.payload_uuid = opts[:payload_uuid]
         begin
           payload_info = {
@@ -237,9 +237,9 @@ protected
             s.payload_uuid.registered = false
           end
         rescue ActiveRecord::ConnectionNotEstablished => e
-          print_error("WARNING: No database connection.  Unable to save payload info.")
+          vprint_error("WARNING: No database connection.  Unable to save payload info.")
         rescue NoMethodError => e
-          print_error("WARNING: Database does not yet support UUIDs.  Unable to save payload info.")
+          vprint_error("WARNING: Database does not yet support UUIDs.  Unable to save payload info.")
         rescue ::Exception => e
           # We just wanna show and log the error, not trying to swallow it.
           print_error("#{e.class} #{e.message}")
